@@ -101,7 +101,10 @@ func (b *Board) Move(start, end Position) error {
 		}
 	}
 
-	// TODO: is path clear?
+	// check if path clear
+	if !b.IsPathClear(start, end) {
+		return errors.New("path not clear")
+	}
 
 	// update hasMoved to true
 	piece.Move()
@@ -190,10 +193,41 @@ func (b *Board) HasEnemyPiece(pos Position, color string) bool {
 	return piece.Color() != color
 }
 
+func (b *Board) IsPathClear(start, end Position) bool {
+	dRow := end.row - start.row
+	dCol := end.col - start.col
+
+	stepRow := sign(dRow)
+	stepCol := sign(dCol)
+
+	r := start.row + stepRow
+	c := start.col + stepCol
+
+	for r != end.row || c != end.col {
+		if !b.IsEmpty(Position{r, c}) {
+			return false
+		}
+		r += stepRow
+		c += stepCol
+	}
+
+	return true
+}
+
 func AbsInt(x int) int {
 	if x < 0 {
 		return -x
 	}
 
 	return x
+}
+
+func sign(x int) int {
+	if x > 0 {
+		return 1
+	}
+	if x < 0 {
+		return -1
+	}
+	return 0
 }
