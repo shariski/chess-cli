@@ -93,9 +93,10 @@ func (b *Board) Move(start, end Position) error {
 		return errors.New("piece movement invalid")
 	}
 
-	captured := b.Get(end)
-	if captured != nil {
-		if captured.Color() == piece.Color() {
+	// can't do friendly fire
+	target := b.Get(end)
+	if target != nil {
+		if target.Color() == piece.Color() {
 			return errors.New("cannot capture teammate")
 		}
 	}
@@ -117,11 +118,15 @@ func (b *Board) Render() {
 	for i, inner := range b.grid {
 		fmt.Fprintf(&sb, "%c | ", b.rowIdx[i])
 
-		for _, piece := range inner {
+		for j, piece := range inner {
 			if piece != nil {
 				fmt.Fprintf(&sb, "%s  ", piece.Symbol())
 			} else {
-				sb.WriteString("-  ")
+				if (i+j)%2 == 0 {
+					sb.WriteString("-  ")
+				} else {
+					sb.WriteString("+  ")
+				}
 			}
 		}
 
@@ -173,6 +178,16 @@ func (b *Board) IsEmpty(pos Position) bool {
 	piece := b.Get(pos)
 
 	return piece == nil
+}
+
+func (b *Board) HasEnemyPiece(pos Position, color string) bool {
+	piece := b.Get(pos)
+
+	if piece == nil {
+		return false
+	}
+
+	return piece.Color() != color
 }
 
 func AbsInt(x int) int {

@@ -40,5 +40,10 @@ func (p *Pawn) IsValidMove(board *Board, start, end Position) bool {
 		return true
 	}
 
+	// move diagonally and capture enemy piece
+	if dRow == 1*direction && AbsInt(dCol) == 1 && board.HasEnemyPiece(end, p.color) {
+		return true
+	}
+
 	return false
 }

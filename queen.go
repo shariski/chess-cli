@@ -22,10 +22,16 @@ func (p *Queen) Move() {
 }
 
 func (p *Queen) IsValidMove(board *Board, start, end Position) bool {
+	dRow := AbsInt(end.row - start.row)
 	dCol := AbsInt(end.col - start.col)
-	if dCol != 0 {
-		return false
+
+	if dRow == dCol && dRow != 0 {
+		return true
 	}
 
-	return true
+	if (dRow > 0 && dCol == 0) || (dRow == 0 && dCol > 0) {
+		return true
+	}
+
+	return false
 }

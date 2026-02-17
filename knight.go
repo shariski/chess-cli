@@ -22,10 +22,12 @@ func (p *Knight) Move() {
 }
 
 func (p *Knight) IsValidMove(board *Board, start, end Position) bool {
+	dRow := AbsInt(end.row - start.row)
 	dCol := AbsInt(end.col - start.col)
-	if dCol != 0 {
-		return false
+
+	if (dRow == 1 && dCol == 2) || (dRow == 2 && dCol == 1) {
+		return true
 	}
 
-	return true
+	return false
 }

@@ -22,10 +22,12 @@ func (p *Rook) Move() {
 }
 
 func (p *Rook) IsValidMove(board *Board, start, end Position) bool {
+	dRow := AbsInt(end.row - start.row)
 	dCol := AbsInt(end.col - start.col)
-	if dCol != 0 {
-		return false
+
+	if (dRow > 0 && dCol == 0) || (dRow == 0 && dCol > 0) {
+		return true
 	}
 
-	return true
+	return false
 }

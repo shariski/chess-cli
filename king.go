@@ -22,10 +22,12 @@ func (p *King) Move() {
 }
 
 func (p *King) IsValidMove(board *Board, start Position, end Position) bool {
+	dRow := AbsInt(end.row - start.row)
 	dCol := AbsInt(end.col - start.col)
-	if dCol != 0 {
-		return false
+
+	if dRow <= 1 && dCol <= 1 && (dRow+dCol) != 0 {
+		return true
 	}
 
-	return true
+	return false
 }
