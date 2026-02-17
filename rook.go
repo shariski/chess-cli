@@ -21,7 +21,7 @@ func (p *Rook) Move() {
 	p.hasMoved = true
 }
 
-func (p *Rook) IsValidMove(start, end Position) bool {
+func (p *Rook) IsValidMove(board *Board, start, end Position) bool {
 	dCol := AbsInt(end.col - start.col)
 	if dCol != 0 {
 		return false

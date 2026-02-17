@@ -35,6 +35,12 @@ func (g *Game) Start() {
 
 		// validate current piece having same color with current turn
 		currentPiece := g.board.Get(*start)
+
+		if currentPiece == nil {
+			fmt.Println("square is empty")
+			continue
+		}
+
 		if currentPiece.Color() != g.current() {
 			fmt.Println("not your piece")
 			continue

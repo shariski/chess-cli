@@ -10,7 +10,7 @@ type Piece interface {
 	Symbol() string
 	Color() string
 	Move()
-	IsValidMove(start, end Position) bool
+	IsValidMove(board *Board, start, end Position) bool
 }
 
 type Board struct {
@@ -89,11 +89,11 @@ func (b *Board) Move(start, end Position) error {
 	}
 
 	// validate piece movement pattern
-	if !piece.IsValidMove(start, end) {
+	if !piece.IsValidMove(b, start, end) {
 		return errors.New("piece movement invalid")
 	}
 
-	captured := b.grid[end.row][end.col]
+	captured := b.Get(end)
 	if captured != nil {
 		if captured.Color() == piece.Color() {
 			return errors.New("cannot capture teammate")
@@ -167,6 +167,12 @@ func (b *Board) Set(pos Position, p Piece) error {
 	b.grid[pos.row][pos.col] = p
 
 	return nil
+}
+
+func (b *Board) IsEmpty(pos Position) bool {
+	piece := b.Get(pos)
+
+	return piece == nil
 }
 
 func AbsInt(x int) int {

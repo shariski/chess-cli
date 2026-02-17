@@ -21,7 +21,7 @@ func (p *Knight) Move() {
 	p.hasMoved = true
 }
 
-func (p *Knight) IsValidMove(start, end Position) bool {
+func (p *Knight) IsValidMove(board *Board, start, end Position) bool {
 	dCol := AbsInt(end.col - start.col)
 	if dCol != 0 {
 		return false

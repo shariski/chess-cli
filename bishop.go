@@ -21,7 +21,7 @@ func (p *Bishop) Move() {
 	p.hasMoved = true
 }
 
-func (p *Bishop) IsValidMove(start, end Position) bool {
+func (p *Bishop) IsValidMove(board *Board, start, end Position) bool {
 	dCol := AbsInt(end.col - start.col)
 	if dCol != 0 {
 		return false
