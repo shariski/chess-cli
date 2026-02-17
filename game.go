@@ -70,7 +70,7 @@ func (g *Game) current() string {
 }
 
 func (g *Game) parseInput(input string) (*Position, *Position, error) {
-	inputParts := strings.Fields(input)
+	inputParts := strings.Split(input, ",")
 
 	if len(inputParts) != 2 {
 		return nil, nil, fmt.Errorf("invalid input")

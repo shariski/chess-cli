@@ -101,11 +101,6 @@ func (b *Board) Move(start, end Position) error {
 		}
 	}
 
-	// check if path clear
-	if !b.IsPathClear(start, end) {
-		return errors.New("path not clear")
-	}
-
 	// update hasMoved to true
 	piece.Move()
 

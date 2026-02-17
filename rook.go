@@ -25,9 +25,13 @@ func (p *Rook) IsValidMove(board *Board, start, end Position) bool {
 	dRow := AbsInt(end.row - start.row)
 	dCol := AbsInt(end.col - start.col)
 
-	if (dRow > 0 && dCol == 0) || (dRow == 0 && dCol > 0) {
-		return true
+	if !((dRow > 0 && dCol == 0) || (dRow == 0 && dCol > 0)) {
+		return false
 	}
 
-	return false
+	if !board.IsPathClear(start, end) {
+		return false
+	}
+
+	return true
 }

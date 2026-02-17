@@ -25,9 +25,13 @@ func (p *Bishop) IsValidMove(board *Board, start, end Position) bool {
 	dRow := AbsInt(end.row - start.row)
 	dCol := AbsInt(end.col - start.col)
 
-	if dRow == dCol && dRow != 0 {
-		return true
+	if !(dRow == dCol && dRow != 0) {
+		return false
 	}
 
-	return false
+	if !board.IsPathClear(start, end) {
+		return false
+	}
+
+	return true
 }
