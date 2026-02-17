@@ -10,6 +10,8 @@ import (
 type Game struct {
 	board       *Board
 	currentTurn string
+	winner      string
+	gameOver    bool
 }
 
 func NewGame() *Game {
@@ -46,10 +48,17 @@ func (g *Game) Start() {
 			continue
 		}
 
-		err = g.board.Move(*start, *end)
+		err = g.board.Move(g, *start, *end)
 		if err != nil {
 			fmt.Println(err)
 			continue
+		}
+
+		game := g.get()
+		if game.gameOver {
+			g.board.Render()
+			fmt.Printf("Winner: %s\n", game.winner)
+			break
 		}
 
 		// movement happened, switch turn
@@ -67,6 +76,15 @@ func (g *Game) switchTurn() {
 
 func (g *Game) current() string {
 	return g.currentTurn
+}
+
+func (g *Game) setWinner(color string) {
+	g.winner = color
+	g.gameOver = true
+}
+
+func (g *Game) get() *Game {
+	return g
 }
 
 func (g *Game) parseInput(input string) (*Position, *Position, error) {

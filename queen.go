@@ -25,11 +25,10 @@ func (p *Queen) IsValidMove(board *Board, start, end Position) bool {
 	dRow := AbsInt(end.row - start.row)
 	dCol := AbsInt(end.col - start.col)
 
-	if !(dRow == dCol && dRow != 0) {
-		return false
-	}
+	isDiagonal := dRow == dCol && dRow != 0
+	isStraight := (dRow > 0 && dCol == 0) || (dRow == 0 && dCol > 0)
 
-	if !((dRow > 0 && dCol == 0) || (dRow == 0 && dCol > 0)) {
+	if !isDiagonal && !isStraight {
 		return false
 	}
 

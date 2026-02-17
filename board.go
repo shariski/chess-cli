@@ -74,7 +74,7 @@ func NewBoard() *Board {
 	return board
 }
 
-func (b *Board) Move(start, end Position) error {
+func (b *Board) Move(game *Game, start, end Position) error {
 	if !b.isValidPosition(start) {
 		return errors.New("start position is not valid")
 	}
@@ -98,6 +98,11 @@ func (b *Board) Move(start, end Position) error {
 	if target != nil {
 		if target.Color() == piece.Color() {
 			return errors.New("cannot capture teammate")
+		}
+
+		// is king captured?
+		if target.Symbol() == "K" || target.Symbol() == "k" {
+			game.setWinner(piece.Color())
 		}
 	}
 
