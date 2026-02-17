@@ -20,3 +20,12 @@ func (p *Queen) Color() string {
 func (p *Queen) Move() {
 	p.hasMoved = true
 }
+
+func (p *Queen) IsValidMove(start, end Position) bool {
+	dCol := AbsInt(end.col - start.col)
+	if dCol != 0 {
+		return false
+	}
+
+	return true
+}

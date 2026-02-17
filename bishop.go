@@ -20,3 +20,12 @@ func (p *Bishop) Color() string {
 func (p *Bishop) Move() {
 	p.hasMoved = true
 }
+
+func (p *Bishop) IsValidMove(start, end Position) bool {
+	dCol := AbsInt(end.col - start.col)
+	if dCol != 0 {
+		return false
+	}
+
+	return true
+}

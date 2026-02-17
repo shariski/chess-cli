@@ -20,3 +20,12 @@ func (p *Pawn) Color() string {
 func (p *Pawn) Move() {
 	p.hasMoved = true
 }
+
+func (p *Pawn) IsValidMove(start, end Position) bool {
+	dCol := AbsInt(end.col - start.col)
+	if dCol != 0 {
+		return false
+	}
+
+	return true
+}

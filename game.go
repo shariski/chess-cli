@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -31,11 +30,20 @@ func (g *Game) Start() {
 		start, end, err := g.parseInput(line)
 		if err != nil {
 			fmt.Println(err)
+			continue
+		}
+
+		// validate current piece having same color with current turn
+		currentPiece := g.board.Get(*start)
+		if currentPiece.Color() != g.current() {
+			fmt.Println("not your piece")
+			continue
 		}
 
 		err = g.board.Move(*start, *end)
 		if err != nil {
 			fmt.Println(err)
+			continue
 		}
 
 		// movement happened, switch turn
@@ -58,31 +66,37 @@ func (g *Game) current() string {
 func (g *Game) parseInput(input string) (*Position, *Position, error) {
 	inputParts := strings.Fields(input)
 
-	startChar := strings.Split(inputParts[0], ",")
-	endChar := strings.Split(inputParts[1], ",")
+	if len(inputParts) != 2 {
+		return nil, nil, fmt.Errorf("invalid input")
+	}
 
-	startRow, err := strconv.Atoi(startChar[0])
+	start, err := chessToIndex(inputParts[0])
 	if err != nil {
 		return nil, nil, err
 	}
 
-	startCol, err := strconv.Atoi(startChar[1])
+	end, err := chessToIndex(inputParts[1])
 	if err != nil {
 		return nil, nil, err
 	}
-
-	endRow, err := strconv.Atoi(endChar[0])
-	if err != nil {
-		return nil, nil, err
-	}
-
-	endCol, err := strconv.Atoi(endChar[1])
-	if err != nil {
-		return nil, nil, err
-	}
-
-	start := &Position{row: startRow, col: startCol}
-	end := &Position{row: endRow, col: endCol}
 
 	return start, end, nil
+}
+
+func chessToIndex(pos string) (*Position, error) {
+	if len(pos) != 2 {
+		return nil, fmt.Errorf("invalid position")
+	}
+
+	file := pos[0]
+	rank := pos[1]
+
+	if file < 'a' || file > 'h' || rank < '1' || rank > '8' {
+		return nil, fmt.Errorf("invalid position")
+	}
+
+	col := int(file - 'a')
+	row := 7 - int(rank-'1')
+
+	return &Position{row: row, col: col}, nil
 }

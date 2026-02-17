@@ -20,3 +20,12 @@ func (p *Rook) Color() string {
 func (p *Rook) Move() {
 	p.hasMoved = true
 }
+
+func (p *Rook) IsValidMove(start, end Position) bool {
+	dCol := AbsInt(end.col - start.col)
+	if dCol != 0 {
+		return false
+	}
+
+	return true
+}

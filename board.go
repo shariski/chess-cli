@@ -10,10 +10,13 @@ type Piece interface {
 	Symbol() string
 	Color() string
 	Move()
+	IsValidMove(start, end Position) bool
 }
 
 type Board struct {
-	grid [8][8]Piece
+	grid   [8][8]Piece
+	rowIdx string
+	colIdx string
 }
 
 type Position struct {
@@ -23,6 +26,8 @@ type Position struct {
 
 func NewBoard() *Board {
 	board := new(Board)
+	board.rowIdx = "87654321"
+	board.colIdx = "abcdefgh"
 
 	// black pieces
 	// non-pawn pieces
@@ -70,20 +75,23 @@ func NewBoard() *Board {
 }
 
 func (b *Board) Move(start, end Position) error {
-	if !b.isValidPostion(start) {
+	if !b.isValidPosition(start) {
 		return errors.New("start position is not valid")
 	}
 
-	if !b.isValidPostion(end) {
+	if !b.isValidPosition(end) {
 		return errors.New("end position is not valid")
 	}
 
-	piece := b.grid[start.row][start.col]
+	piece := b.Get(start)
 	if piece == nil {
 		return errors.New("square is empty")
 	}
 
-	// TODO: validate piece movement pattern
+	// validate piece movement pattern
+	if !piece.IsValidMove(start, end) {
+		return errors.New("piece movement invalid")
+	}
 
 	captured := b.grid[end.row][end.col]
 	if captured != nil {
@@ -92,11 +100,13 @@ func (b *Board) Move(start, end Position) error {
 		}
 	}
 
+	// TODO: is path clear?
+
 	// update hasMoved to true
 	piece.Move()
 
-	b.grid[start.row][start.col] = nil
-	b.grid[end.row][end.col] = piece
+	b.Set(end, piece)
+	b.Set(start, nil)
 
 	return nil
 }
@@ -105,7 +115,7 @@ func (b *Board) Render() {
 	var sb strings.Builder
 
 	for i, inner := range b.grid {
-		fmt.Fprintf(&sb, "%d | ", i)
+		fmt.Fprintf(&sb, "%c | ", b.rowIdx[i])
 
 		for _, piece := range inner {
 			if piece != nil {
@@ -128,7 +138,7 @@ func (b *Board) Render() {
 	sb.WriteString("    ")
 
 	for j := range b.grid[0] {
-		fmt.Fprintf(&sb, "%d  ", j)
+		fmt.Fprintf(&sb, "%c  ", b.colIdx[j])
 	}
 
 	sb.WriteString("\n\n")
@@ -137,7 +147,7 @@ func (b *Board) Render() {
 }
 
 // first letter is not capitalized (for internal user only)
-func (b *Board) isValidPostion(pos Position) bool {
+func (b *Board) isValidPosition(pos Position) bool {
 	if pos.row < 0 || pos.row > 7 {
 		return false
 	}
@@ -147,4 +157,22 @@ func (b *Board) isValidPostion(pos Position) bool {
 	}
 
 	return true
+}
+
+func (b *Board) Get(pos Position) Piece {
+	return b.grid[pos.row][pos.col]
+}
+
+func (b *Board) Set(pos Position, p Piece) error {
+	b.grid[pos.row][pos.col] = p
+
+	return nil
+}
+
+func AbsInt(x int) int {
+	if x < 0 {
+		return -x
+	}
+
+	return x
 }
