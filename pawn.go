@@ -1,7 +1,8 @@
 package main
 
 type Pawn struct {
-	color string
+	color    string
+	hasMoved bool
 }
 
 func (p *Pawn) Symbol() string {
@@ -14,4 +15,8 @@ func (p *Pawn) Symbol() string {
 
 func (p *Pawn) Color() string {
 	return p.color
+}
+
+func (p *Pawn) Move() {
+	p.hasMoved = true
 }

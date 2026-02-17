@@ -1,7 +1,8 @@
 package main
 
 type Queen struct {
-	color string
+	color    string
+	hasMoved bool
 }
 
 func (p *Queen) Symbol() string {
@@ -14,4 +15,8 @@ func (p *Queen) Symbol() string {
 
 func (p *Queen) Color() string {
 	return p.color
+}
+
+func (p *Queen) Move() {
+	p.hasMoved = true
 }

@@ -1,7 +1,8 @@
 package main
 
 type Bishop struct {
-	color string
+	color    string
+	hasMoved bool
 }
 
 func (p *Bishop) Symbol() string {
@@ -14,4 +15,8 @@ func (p *Bishop) Symbol() string {
 
 func (p *Bishop) Color() string {
 	return p.color
+}
+
+func (p *Bishop) Move() {
+	p.hasMoved = true
 }

@@ -1,5 +1,6 @@
 package main
 
 func main() {
-	Start()
+	game := NewGame()
+	game.Start()
 }

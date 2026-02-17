@@ -3,11 +3,13 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 type Piece interface {
 	Symbol() string
 	Color() string
+	Move()
 }
 
 type Board struct {
@@ -90,7 +92,8 @@ func (b *Board) Move(start, end Position) error {
 		}
 	}
 
-	// TODO: hasMoved
+	// update hasMoved to true
+	piece.Move()
 
 	b.grid[start.row][start.col] = nil
 	b.grid[end.row][end.col] = piece
@@ -98,18 +101,39 @@ func (b *Board) Move(start, end Position) error {
 	return nil
 }
 
-func (b *Board) Print() {
-	for _, inner := range b.grid {
-		for _, value := range inner {
-			if value != nil {
-				fmt.Printf("%s ", value.Symbol())
+func (b *Board) Render() {
+	var sb strings.Builder
+
+	for i, inner := range b.grid {
+		fmt.Fprintf(&sb, "%d | ", i)
+
+		for _, piece := range inner {
+			if piece != nil {
+				fmt.Fprintf(&sb, "%s  ", piece.Symbol())
 			} else {
-				fmt.Print("- ")
+				sb.WriteString("-  ")
 			}
 		}
-		fmt.Println()
+
+		sb.WriteString("\n")
 	}
-	fmt.Println()
+
+	sb.WriteString("  ")
+
+	for range b.grid[0] {
+		sb.WriteString("---")
+	}
+
+	sb.WriteString("\n")
+	sb.WriteString("    ")
+
+	for j := range b.grid[0] {
+		fmt.Fprintf(&sb, "%d  ", j)
+	}
+
+	sb.WriteString("\n\n")
+
+	fmt.Print(sb.String())
 }
 
 // first letter is not capitalized (for internal user only)

@@ -1,7 +1,8 @@
 package main
 
 type Rook struct {
-	color string
+	color    string
+	hasMoved bool
 }
 
 func (p *Rook) Symbol() string {
@@ -14,4 +15,8 @@ func (p *Rook) Symbol() string {
 
 func (p *Rook) Color() string {
 	return p.color
+}
+
+func (p *Rook) Move() {
+	p.hasMoved = true
 }

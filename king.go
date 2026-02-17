@@ -1,7 +1,8 @@
 package main
 
 type King struct {
-	color string
+	color    string
+	hasMoved bool
 }
 
 func (p *King) Symbol() string {
@@ -14,4 +15,8 @@ func (p *King) Symbol() string {
 
 func (p *King) Color() string {
 	return p.color
+}
+
+func (p *King) Move() {
+	p.hasMoved = true
 }
